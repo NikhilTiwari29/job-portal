@@ -12,18 +12,26 @@ const NavLinks = () => {
 
   return (
     <div className="flex gap-5 h-full items-center text-mine-shaft-300">
-      {links.map((link, index) => (
-        <div
-          key={index}
-          className={`${
-            location.pathname === link.url
-              ? "border-bright-sun-400 text-bright-sun-400"
-              : "border-transparent"
-          } border-t-[3px] h-full flex items-center`}
-        >
-          <Link to={link.url}>{link.name}</Link>
-        </div>
-      ))}
+      {links.map((link, index) => {
+        const isActive = location.pathname === link.url;
+
+        return (
+          <Link
+            key={index}
+            to={link.url}
+            className={`px-4 py-2 transition-all duration-200 ease-in-out rounded-md
+    ${
+      isActive
+        ? "text-bright-sun-400 border-t-4 border-bright-sun-400"
+        : "text-mine-shaft-300"
+    }
+    ${!isActive ? "hover:text-white hover:border hover:border-white" : ""}
+  `}
+          >
+            {link.name}
+          </Link>
+        );
+      })}
     </div>
   );
 };

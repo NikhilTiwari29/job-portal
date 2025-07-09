@@ -3,7 +3,7 @@ import { IconAsset, IconBell, IconSettings } from "@tabler/icons-react";
 import NavLinks from "./NavLinks";
 const Header = () => {
   return (
-    <div className="w-full bg-mine-shaft-950 h-20 text-white flex justify-between px-6 items-center">
+    <div className="w-full bg-mine-shaft-950 h-20 text-white flex justify-between px-6 items-center font-['poppins']">
       <div>
         <div className="flex gap-1 items-center text-bright-sun-400">
           <IconAsset className="h-9 w-9 stroke={2.5}" />

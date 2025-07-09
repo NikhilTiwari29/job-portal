@@ -10,7 +10,7 @@ const Companies = () => {
       </div>
       <Marquee pauseOnHover={true}>
         {companies.map((company, index) => (
-          <div className="mx-8 px-2 py-1 hover:bg-mine-shaft-900 rounded-xl cursor-pointer">
+          <div className="mx-8 px-2 py-1 hover:bg-mine-shaft-900 rounded-xl cursor-pointer" key={index}>
             <img
               className="h-14"
               src={`/Companies/${company}.png`}

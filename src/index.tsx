@@ -41,10 +41,11 @@ const mantineTheme = createTheme({
       "#2d2d2d",
     ],
   },
+  fontFamily:"poppins,sans-serif"
 });
 root.render(
   <React.StrictMode>
-    <MantineProvider theme={mantineTheme}>
+    <MantineProvider defaultColorScheme="dark" theme={mantineTheme}>
       <App />
     </MantineProvider>
   </React.StrictMode>
