@@ -8,7 +8,7 @@ import {
   PillsInput,
   useCombobox,
 } from "@mantine/core";
-import { IconSearch } from "@tabler/icons-react";
+import { IconSearch, IconSelector } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 
 const MultiInput = (props: any) => {
@@ -78,7 +78,7 @@ const MultiInput = (props: any) => {
       <Combobox.DropdownTarget>
         <PillsInput
           variant="unstyled"
-          rightSection={<Combobox.Chevron />}
+          rightSection={<IconSelector />}
           onClick={() => combobox.toggleDropdown()}
           leftSection={
             <div className="text-bright-sun-400 p-1 bg-mine-shaft-900 rounded-full mr-2">
