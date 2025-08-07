@@ -31,6 +31,7 @@ dependencies {
 	testImplementation("org.mockito:mockito-core")
 	testImplementation("org.springframework.security:spring-security-test")
 	runtimeOnly("com.h2database:h2")
+	implementation("org.springframework.boot:spring-boot-starter-mail")
 }
 
 tasks.withType<Test> {

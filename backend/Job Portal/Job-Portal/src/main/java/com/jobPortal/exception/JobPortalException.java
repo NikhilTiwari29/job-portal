@@ -1,8 +1,15 @@
 package com.jobPortal.exception;
 
-public class JobPortalException extends Exception{
+import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
-    public JobPortalException(String message){
+@Getter
+public class JobPortalException extends Exception {
+    private final HttpStatus status;
+
+    public JobPortalException(String message, HttpStatus status) {
         super(message);
+        this.status = status;
     }
+
 }
