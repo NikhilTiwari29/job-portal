@@ -16,4 +16,7 @@ public interface UserService {
     void verifyOtp(String email, String otp) throws JobPortalException;
 
     void changePassword(ChangePasswordRequest request) throws JobPortalException;
+
+    void deleteExpiredOtps();
+
 }

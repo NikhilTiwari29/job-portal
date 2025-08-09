@@ -15,10 +15,7 @@ public class ChangePasswordRequest {
     @NotBlank(message = "{user.email.absent}")
     private String email;
 
-    @NotBlank(message = "{user.old.password.absent}")
-    private String oldPassword;
-
     @NotBlank(message = "New password must not be blank")
-    private String newPassword;
+    private String password;
 }
 

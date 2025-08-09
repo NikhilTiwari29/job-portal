@@ -16,10 +16,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -58,7 +60,6 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public Boolean sendOtp(String email) throws JobPortalException {
-        System.out.println("reached here");
         // 1. Find user
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new JobPortalException("USER_NOT_FOUND", HttpStatus.NOT_FOUND));
@@ -70,8 +71,8 @@ public class UserServiceImpl implements UserService{
         Otp otp = new Otp();
         otp.setEmail(user.getEmail());
         otp.setOtp(otpCode);
-        otp.setGeneratedAt(LocalDateTime.now());
-        otp.setExpiresAt(LocalDateTime.now().plusMinutes(10));
+        otp.setCreationTime(LocalDateTime.now());
+        otp.setExpiresAt(LocalDateTime.now().plusMinutes(5));
         otp.setUser(user);
 
         otpRepository.save(otp);
@@ -97,7 +98,7 @@ public class UserServiceImpl implements UserService{
     }
 
     public void verifyOtp(String email, String otpValue) throws JobPortalException {
-        Otp latestOtp = otpRepository.findTopByEmailOrderByGeneratedAtDesc(email)
+        Otp latestOtp = otpRepository.findTopByEmailOrderByCreationTimeDesc(email)
                 .orElseThrow(() -> new JobPortalException("OTP_NOT_FOUND", HttpStatus.NOT_FOUND));
 
         if (!latestOtp.getOtp().equals(otpValue)) {
@@ -116,16 +117,22 @@ public class UserServiceImpl implements UserService{
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new JobPortalException("USER_NOT_FOUND", HttpStatus.NOT_FOUND));
 
-        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
-            throw new JobPortalException("INCORRECT_OLD_PASSWORD", HttpStatus.BAD_REQUEST);
+        if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new JobPortalException("NEW_PASS_SHOULD_NOT_BE_SAME_AS_OLD_PASS", HttpStatus.BAD_REQUEST);
         }
 
-        if (passwordEncoder.matches(request.getNewPassword(), user.getPassword())) {
-            throw new JobPortalException("NEW_PASS_NOT_SAME_AS_OLD_PASS", HttpStatus.BAD_REQUEST);
-        }
-
-        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         userRepository.save(user);
+    }
+
+    @Scheduled(fixedRate = 60000)
+    public void deleteExpiredOtps() {
+        LocalDateTime expiry = LocalDateTime.now().minusMinutes(5);
+        List<Otp> expiredOtps = otpRepository.findByCreationTimeBefore(expiry);
+        if (!expiredOtps.isEmpty()){
+            otpRepository.deleteAll(expiredOtps);
+            System.out.println("Removed " + expiredOtps.size() + " otps");
+        }
     }
 
 }

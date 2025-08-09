@@ -20,7 +20,7 @@ public class Otp {
     private Long id;
     private String email;
     private String otp;
-    private LocalDateTime generatedAt;
+    private LocalDateTime creationTime;
     private LocalDateTime expiresAt;
     @ManyToOne
     @JsonIgnore
